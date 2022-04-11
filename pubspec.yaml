@@ -1,0 +1,38 @@
+name: plwha
+description: A new Flutter project.
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_auth:
+  firebase_core:
+  google_sign_in:
+  shared_preferences:
+  random_string:
+  font_awesome_flutter:
+  cloud_firestore:
+  lottie:
+  sizer:
+
+  cupertino_icons: ^1.0.0
+  flutter_speed_dial: ^5.0.0+1
+  carousel_slider: ^4.0.0
+  swipe_to: ^1.0.2
+  readmore: ^2.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/logo.png
