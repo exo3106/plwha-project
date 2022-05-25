@@ -1,16 +1,15 @@
-# plwha
+# TAMKA
 
-A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+A social justice app to counter stigma & discrimination, the development of a social rights approach as an 
+advocacy method”, hereafter referred to as the project, stigma towards people leaving 
+with HIV/AIDS in Tanzania is a challenge that still prevails.
 
-A few resources to get you started if this is your first Flutter project:
+You can find more information at https//:fol.mzumbe.ac.tz:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+  Developers get intouch with us :
+  -Exaud Paul : exaud.riziki@gmail.com
+  -Frank Msonge : fmsonge@mzumbe.ac.tz
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
