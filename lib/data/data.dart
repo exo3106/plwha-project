@@ -1,5 +1,5 @@
-import 'package:plwha/models/book_model.dart';
-import 'package:plwha/models/single_post_model.dart';
+import 'package:tamka/models/book_model.dart';
+import 'package:tamka/models/single_post_model.dart';
 
 List<PostModel> getBooks(){
 

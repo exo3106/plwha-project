@@ -1,9 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:plwha/screens/home_screen.dart';
-import 'package:plwha/screens/sign_in_screen.dart';
-import 'package:plwha/services/auth.dart';
-import 'package:plwha/views/home_chat.dart';
+import 'package:tamka/services/auth.dart';
+import 'package:tamka/views/splash_screen.dart';
+import 'package:tamka/views/splash_screen2.dart';
 
 
 void main() async {
@@ -14,6 +13,7 @@ void main() async {
       apiKey: 'AIzaSyBMOn4Loxi9KRVREIgqk4PFF8nTbPHHv3Y',
       projectId: 'plwha-68e4e',
       messagingSenderId: '482794916970',
+      storageBucket:'plwha-68e4e.appspot.com'
     );
     await Firebase.initializeApp(
         options: firebaseOptions
@@ -36,9 +36,9 @@ class MyApp extends StatelessWidget {
         future: AuthMethods().getCurrentUser(),
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData) {
-            return HomeScreen();
+            return Splash();
           } else {
-            return const SignInScreen();
+            return  Splash2();
           }
         },
       ),

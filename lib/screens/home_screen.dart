@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:plwha/res/custom_colors.dart';
-import 'package:plwha/screens/sign_in_screen.dart';
-import 'package:plwha/widgets/appbar/ChatAppBarUI.dart';
-import 'package:plwha/widgets/appbar/GameAppBarUI.dart';
-import 'package:plwha/widgets/appbar/HomeAppBarUI.dart';
-import 'package:plwha/widgets/nav_drawer.dart';
+import 'package:tamka/res/custom_colors.dart';
+import 'package:tamka/screens/sign_in_screen.dart';
+import 'package:tamka/widgets/appbar/ChatAppBarUI.dart';
+import 'package:tamka/widgets/appbar/GameAppBarUI.dart';
+import 'package:tamka/widgets/appbar/HomeAppBarUI.dart';
+import 'package:tamka/widgets/nav_drawer.dart';
 import '../services/auth.dart';
 import 'chat_screen_ui.dart';
 import 'game_screen_ui.dart';
@@ -32,12 +32,12 @@ class _HomeScreenState extends State<HomeScreen> {
   final appbar = [
     const HomeAppBarUI(),
     const ChatAppBarUI(),
-    const GameAppBarUI(),
+     GameAppBarUI(),
   ];
   final screens = [
       const HomeScreenUI(),
       const ChatScreenUI(),
-      const GameScreenUI()
+      GameScreenUI()
   ];
 
   _HomeScreenState(this._user);
@@ -73,18 +73,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 this.index = index;
               });
             },
-            destinations:  const [
+            destinations:   [
               NavigationDestination(
-                  icon: Icon(Icons.home_outlined,size: 18,),
+                  icon: Icon(Icons.home_outlined,size: 18,color: CustomColors.firebaseAmber,),
                   label: "Home"
               ),
               NavigationDestination(
-                  icon: Icon(Icons.chat_outlined,size: 18,),
-                  label: "Chat"
+                  icon: Icon(FontAwesomeIcons.envelopeOpenText,size: 18,color: CustomColors.firebaseOrange,),
+                  label: "Private Chat"
               ),
               NavigationDestination(
-                  icon: Icon(Icons.gamepad,size: 18,),
-                  label: "Quiz Games"
+                  icon: Icon(FontAwesomeIcons.comments,size: 18,color: CustomColors.firebaseYellow,),
+                  label: "Forum"
               ),
             ],
           )

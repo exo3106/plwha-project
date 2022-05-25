@@ -1,14 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:plwha/res/custom_colors.dart';
-import 'package:plwha/screens/sign_in_screen.dart';
-import 'package:plwha/services/auth.dart';
-import 'package:plwha/widgets/appbar/app_bar_title.dart';
+import 'package:tamka/res/custom_colors.dart';
+import 'package:tamka/screens/sign_in_screen.dart';
+import 'package:tamka/services/auth.dart';
+import 'package:tamka/widgets/appbar/app_bar_title.dart';
 
-import '../helperfunctions/sharedpref_helper.dart';
-import '../widgets/searchbar/search_bar.dart';
 import 'home_screen.dart';
 
 class UserInfoScreen extends StatefulWidget {
@@ -26,13 +25,7 @@ class UserInfoScreen extends StatefulWidget {
 class _UserInfoScreenState extends State<UserInfoScreen> {
   User _user;
   bool _isSigningOut = false;
-  String myName, myProfilePic, myUserName, myEmail;
-  getMyInfoFromSharedPreference() async {
-    myName = await SharedPreferenceHelper().getDisplayName();
-    //myProfilePic = await SharedPreferenceHelper().getUserProfileUrl();
-    myUserName = await SharedPreferenceHelper().getUserName();
-    myEmail = await SharedPreferenceHelper().getUserEmail();
-  }
+
   Route _routeToSignInScreen() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => SignInScreen(),
@@ -51,15 +44,11 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
       },
     );
   }
-  editProfileUsername(){
-
-  }
-  uploadPhoto(){}
 
   @override
   void initState() {
     _user = widget._user;
-    getMyInfoFromSharedPreference();
+
     super.initState();
   }
 
@@ -67,7 +56,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColors.firebaseNavy,
-      appBar: AppBar(
+      appBar:
+      AppBar(
         elevation: 0,
         backgroundColor: CustomColors.firebaseNavy,
         title: const AppBarTitle(),
@@ -87,7 +77,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           children: const [
                             Icon(Icons.info, size: 18,),
                             SizedBox(width: 5,),
-                            Text(" About PLWHA"),
+                            Text(" About PLWHA "),
+
                           ]
                       ),
                     ),
@@ -159,7 +150,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
             ),
           ]
       ),
-      body: SafeArea(
+      body:  StreamBuilder(
+          stream:FirebaseFirestore.instance.collection('users').doc(_user.uid).snapshots(),
+          builder: (context, snapshot){
+    if(snapshot.hasData){
+    return
+      SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
             left: 16.0,
@@ -195,7 +191,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     ),
               const SizedBox(height: 16.0),
               Text(
-                'Hello  ${myUserName}',
+                'Hello  ${snapshot.data['username'].toString()}',
                 style: TextStyle(
                   color: CustomColors.firebaseGrey,
                   fontSize: 26,
@@ -213,7 +209,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               ),
               const SizedBox(height: 24.0),
               Text(
-                'You are now signed in using your Google account. To sign out of your account click the "Sign Out" button below.',
+                'This Application Cares more about anonymity, please do not share your credentials, or provide your real personal information',
                 style: TextStyle(
                     color: CustomColors.firebaseGrey.withOpacity(0.8),
                     fontSize: 14,
@@ -223,7 +219,23 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
             ],
           ),
         ),
+      );
+      Text(snapshot.data['username'].toString());  // here my editor shows error saying 'The method '[]' can't be unconditionally invoked because the receiver can be 'null'.' and asks for a null check and then shows error again
+    }
+    return Text('Nothing');
+    }
+
+
+
+        /*
+        * this container will contain the text messaging area where sender can send a message to receiver
+        * to improve code readability we created the widget in widget folder that will contain the functionality
+
+         */
+
+
       ),
+
     );
   }
   _logoutUser() async{

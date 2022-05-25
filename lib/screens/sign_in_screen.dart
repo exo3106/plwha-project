@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:plwha/screens/home_screen.dart';
-import 'package:plwha/services/database.dart';
+import 'package:tamka/screens/home_screen.dart';
+import 'package:tamka/services/database.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:math';
 import '../helperfunctions/sharedpref_helper.dart';
@@ -22,6 +22,7 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
    bool _validate = false;
+   bool passenable = true;
    bool _isSigningIn = false;
    bool _isLoginPage = false;
   final _formKey = GlobalKey<FormState>();
@@ -90,6 +91,8 @@ class _SignInScreenState extends State<SignInScreen> {
               "username": userInfo.email.replaceAll("@gmail.com", ""),
               "name": userInfo.email.replaceAll("@gmail.com", ""),
               "imgUrl": getUserProfile,
+              "user_id":userInfo.uid,
+              'groups': [],
               "is_staff": false
             };
             await DatabaseMethods.addUserInfoToDB(userInfo.uid, userInfoMap);
@@ -240,9 +243,11 @@ class _SignInScreenState extends State<SignInScreen> {
                     SizedBox(
                         height:100,
                         width: 200,
-                        child: Image.asset("assets/logo.png")
+                        child: Image.asset("assets/logo-white.png")
                     ),
-                    const SizedBox(height: 10,),
+                     SizedBox(child: Text("PLWHA FORUM", style: TextStyle(color: CustomColors.firebaseOrange, fontWeight: FontWeight.bold, fontSize: 18),),),
+                    const SizedBox(height: 15,),
+
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 800),
                       curve:Curves.bounceInOut,
@@ -297,7 +302,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 const SizedBox(height: 10,),
-                                const Text("Please Login to Your Account",
+                                const Text("Login With your Credential",
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 15,
@@ -327,10 +332,11 @@ class _SignInScreenState extends State<SignInScreen> {
                                     textInputAction: TextInputAction.done,
                                     obscureText: true,
                                     validator: (value) => Validator.validatePassword(password: _pass.text.trim()),
-                                    decoration: const InputDecoration(
+                                    decoration:  InputDecoration(
                                       prefixIcon: Icon(Icons.lock,color: Color(0xFFFFCA28),),
                                       labelText: 'Password',
-                                      border: OutlineInputBorder(
+                                      border:
+                                      OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color:Color(0xFFFFCA28),
                                         ),
@@ -383,11 +389,24 @@ class _SignInScreenState extends State<SignInScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 const SizedBox(height: 10,),
-                                const Text("Please Register a new Account",
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 15,
-                                  ),),
+                                Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child:Container(
+                                        child:Padding(
+                                            padding: EdgeInsets.all(10),
+                                            child:const Text("HINT\nIn order to improve privacy, do not use personal email \nUse any email even if it's not exist ",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ),
+                                    decoration: BoxDecoration(
+                                      color:CustomColors.firebaseNavyLight,
+                                      borderRadius: BorderRadius.all(Radius.circular(7)),
+                                    ),
+                                  ),
+                                ),
                                 const SizedBox(height: 5,),
                                 Container(
                                   padding: const EdgeInsets.only(right: 20,left: 20),
@@ -413,15 +432,27 @@ class _SignInScreenState extends State<SignInScreen> {
                                     textInputAction: TextInputAction.done,
                                     obscureText: true,
                                     validator: (value) => Validator.validatePassword(password: _pass.text.trim()),
-                                    decoration: const InputDecoration(
+                                    decoration:  InputDecoration(
                                       prefixIcon: Icon(Icons.lock,color: Color(0xFFFFCA28),),
                                       labelText: 'Password',
-                                      border: OutlineInputBorder(
+                                      border:
+                                      OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color:Color(0xFFFFCA28),
                                         ),
                                         borderRadius: BorderRadius.only(topLeft:Radius.circular(10),topRight:Radius.circular(10),bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),
                                       ),
+                                      // suffix:
+                                      // IconButton(onPressed: (){
+                                      //   setState(() {
+                                      //     if(passenable){
+                                      //       passenable=false;
+                                      //     }
+                                      //     else{
+                                      //       passenable=true;
+                                      //     }
+                                      //   });
+                                      // }, icon: Icon(passenable? Icons.remove_red_eye:Icons.password)),
                                     ),
                                   ),
                                 ),
@@ -478,6 +509,7 @@ class DatabaseRefDoc {
   //User Update Info to FireStore
   Future updateUserInfo({ String email, String name}) async {
     await refDocument.doc(uid).set({
+      'userId':uid,
       'email':email,
       'name': name,
     });

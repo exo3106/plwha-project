@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:plwha/helperfunctions/sharedpref_helper.dart';
+import 'package:tamka/helperfunctions/sharedpref_helper.dart';
 
 class DatabaseMethods {
 
@@ -166,13 +166,25 @@ class DatabaseMethods {
   }
 
   Future<Stream<QuerySnapshot>> getChatRooms() async {
-    String myUsername = await SharedPreferenceHelper().getUserName();
-    return FirebaseFirestore.instance
-        .collection("chatrooms")
-        .orderBy("lastMessageSendTs", descending: true)
-        .where("users", arrayContains: myUsername)
-        .snapshots();
-  }
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    await FirebaseFirestore.instance.collection("users").doc(auth.currentUser.uid).get().then(
+            (DocumentSnapshot userdoc){
+              return FirebaseFirestore.instance
+                  .collection("chatrooms")
+                  .orderBy("lastMessageSendTs", descending: true)
+                  .where("users", arrayContains:  userdoc.get("username").toString())
+                  .snapshots();
+
+
+            }
+
+            );
+
+        }
+
+
+
 
   Future<QuerySnapshot> getUserInfo(String username) async {
     return await FirebaseFirestore.instance

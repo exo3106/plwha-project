@@ -1,35 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:plwha/data/data.dart';
-import 'package:plwha/models/book_model.dart';
-import 'package:plwha/models/single_post_model.dart';
-import 'package:plwha/res/widgets.dart';
+import 'package:tamka/data/data.dart';
+import 'package:tamka/models/single_post_model.dart';
+import 'package:tamka/widgets/articles_tab.dart';
 import 'package:readmore/readmore.dart';
 import '../data/data.dart';
-import '../models/book_model.dart';
 import '../models/single_post_model.dart';
-import '../widgets/image_carousel.dart';
-import 'posts_details.dart';
-
-String slectedCategorie = "All";
+import '../res/custom_colors.dart';
+import '../widgets/video_tab.dart';
+import 'carousel_home.dart';
 
 class PLWHA extends StatefulWidget {
   @override
   _PLWHAState createState() => _PLWHAState();
 }
 
-class _PLWHAState extends State<PLWHA> {
+class _PLWHAState extends State <PLWHA> with SingleTickerProviderStateMixin {
 
-  List<String> categories = ["All","Videos","Popular Articles"];
+  TabController tabController;
 
-  List<PostModel> books =[];
   List<SinglePostModel> singleeBooks = [];
 
   @override
   void initState() {
     // TODO: implement initState
+    tabController =  TabController(length:2 ,vsync: this);
     super.initState();
 
-    books = getBooks();
     singleeBooks = getSingleBooks();
   }
 
@@ -46,40 +42,27 @@ class _PLWHAState extends State<PLWHA> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               SizedBox(height: 16,),
-              Carousel(),
+              CarouselHome(),
               SizedBox(height: 30,),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                height: 40,
-                child: ListView.builder(
-                    itemCount: categories.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    physics: ClampingScrollPhysics(),
-                    itemBuilder: (context, index){
-                      return CategorieTile(
-                        text: categories[index],
-                        isSelected: slectedCategorie == categories[index],
-                      );
-                    }),
-              ),
-              Container(
-                height: 200,
-                child: ListView.builder(
-                    itemCount: books.length,
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
-                    itemBuilder: (context, index){
-                      return PostTile(
-                        imgAssetPath: books[index].imgAssetPath,
-                        rating: books[index].rating,
-                        title: books[index].title,
-                        description: books[index].description,
-                        category: books[index].categorie,
-                      );
-                    }),
-              ),
+              TabBar(
+                  controller:tabController,
+                  labelColor: CustomColors.firebaseNavy,
+                  unselectedLabelColor: CustomColors.firebaseNavyLight,
+                  tabs: [
+                    Tab(text:"Videos",),
+                    Tab(text:"Articles",),
+                  ],
+                ),
+                SizedBox(
+                height:200,
+                child:TabBarView(
+                      controller: tabController,
+                        children:[
+                            VideosTab(),
+                            ArticlesTab()
+                        ]
+                    ),
+                ),
               SizedBox(height: 16,),
               Text("Articles and Publications", style: TextStyle(
                   color: Colors.black87,
@@ -156,91 +139,7 @@ class _CategorieTileState extends State<CategorieTile> {
   }
 }
 
-class PostTile extends StatelessWidget {
 
-  final String imgAssetPath,title,description, category;
-  final int rating;
-  PostTile({@required this.rating,@required this.description,
-    @required this.title,@required this.category, @required this.imgAssetPath});
-
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => BookDetails()
-        ));
-      },
-      child: Container(
-        height: 200,
-        margin: EdgeInsets.only(right: 16),
-        alignment: Alignment.bottomLeft,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: 180,
-              alignment: Alignment.bottomLeft,
-              child: Container(
-                  height:  MediaQuery.of(context).size.height - 200,
-                  width: MediaQuery.of(context).size.width - 80,
-                  padding: EdgeInsets.symmetric(vertical: 12,horizontal: 12),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12)
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        width: 110,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width - 220,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(title, style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500
-                            ),),
-                            SizedBox(height: 10,),
-                            Text(description, style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 13
-                            ),),
-                            Spacer(),
-                            Row(
-                              children: <Widget>[
-                                StarRating(
-                                  rating: rating,
-                                ),
-                                Spacer(),
-                                Text(category,style: TextStyle(
-                                    color: Color(0xff007084)
-                                ),)
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-              ),
-            ),
-            Container(
-              height: 180,
-              margin: EdgeInsets.only(left: 12,
-                top: 0,),
-              child: Image.asset(imgAssetPath, height: 120,width: 100,
-                fit: BoxFit.contain,),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 class SingleBookTile extends StatelessWidget {
 

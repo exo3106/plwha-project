@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:plwha/res/custom_colors.dart';
+import 'package:tamka/res/custom_colors.dart';
 import '../../screens/sign_in_screen.dart';
 import '../../screens/user_info_screen.dart';
 import '../../services/auth.dart';
@@ -18,20 +18,7 @@ class HomeAppBarUI extends StatelessWidget{
       title: const AppBarTitle(),
       actions:
       <Widget>[
-        Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const SearchPage()
-                    ));
-              },
-              child: const Icon(
-                Icons.search,
-                size: 26.0,
-              ),
-            )
-        ),
+
 
         PopupMenuButton(
             color: CustomColors.firebaseNavy,

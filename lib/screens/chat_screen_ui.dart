@@ -9,6 +9,7 @@ class ChatScreenUI extends StatefulWidget {
   const ChatScreenUI({Key key}):
         super(key: key);
 
+
   @override
   ChatScreenUIState createState() => ChatScreenUIState();
 
@@ -24,7 +25,7 @@ class ChatScreenUIState extends State<ChatScreenUI>{
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     return Scaffold(
-      backgroundColor: CustomColors.firebaseBackground,
+      // backgroundColor: CustomColors.firebaseBackground,
       body: ChatTabs(),
     );
   }

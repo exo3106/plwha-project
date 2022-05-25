@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helperfunctions/sharedpref_helper.dart';
 import '../screens/home_screen.dart';
-import '../views/home_chat.dart';
 import 'database.dart';
 
 class AuthMethods {

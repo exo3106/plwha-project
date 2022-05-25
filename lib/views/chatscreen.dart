@@ -1,188 +1,132 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:random_string/random_string.dart';
-import '../helperfunctions/sharedpref_helper.dart';
-import '../services/database.dart';
+import 'package:timeago/timeago.dart' as timeago;
+// import 'package:weed/widgets/singleMessage.dart';
 
+import '../res/custom_colors.dart';
+import '../widgets/message_text_field.dart';
+import '../widgets/singleMessage.dart';
+// import '../widgets/message_text_field.dart';
+/*
+        * This is the chart screen
+        * this is the screen where an individual can chart privately with a user
 
-class ChatScreen extends StatefulWidget {
-  final String chatWithUsername, name;
-  ChatScreen(this.chatWithUsername, this.name);
+         */
+class ChatScreen extends StatelessWidget{
+  /*
+        * we started with the declaration of required data for both, sender and receiver
+
+         */
+   final User senderId;
+   final String receiverId;
+   final String senderName;
+
+  /*
+        * create the class constructor so that it will be easy to retrieve data
+
+         */
+  ChatScreen({
+     this.senderId, this.receiverId, this.senderName,
+  });
   @override
-  _ChatScreenState createState() => _ChatScreenState();
-}
-
-class _ChatScreenState extends State<ChatScreen> {
-  String chatRoomId, messageId = "";
-  Stream messageStream;
-  String myName, myProfilePic, myUserName, myEmail;
-  TextEditingController messageTextEdittingController = TextEditingController();
-
-  getMyInfoFromSharedPreference() async {
-    myName = await SharedPreferenceHelper().getDisplayName();
-    myProfilePic = await SharedPreferenceHelper().getUserProfileUrl();
-    myUserName = await SharedPreferenceHelper().getUserName();
-    myEmail = await SharedPreferenceHelper().getUserEmail();
-
-    chatRoomId = getChatRoomIdByUsernames(widget.chatWithUsername, myUserName);
-  }
-
-  getChatRoomIdByUsernames(String a, String b) {
-    if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
-      return "$b\_$a";
-    } else {
-      return "$a\_$b";
-    }
-  }
-
-  addMessage(bool sendClicked) {
-    if (messageTextEdittingController.text != "") {
-      String message = messageTextEdittingController.text;
-
-      var lastMessageTs = DateTime.now();
-
-      Map<String, dynamic> messageInfoMap = {
-        "message": message,
-        "sendBy": myUserName,
-        "ts": lastMessageTs,
-        "imgUrl": myProfilePic
-      };
-
-      //messageId
-      if (messageId == "") {
-        messageId = randomAlphaNumeric(12);
-      }
-
-      DatabaseMethods()
-          .addMessage(chatRoomId, messageId, messageInfoMap)
-          .then((value) {
-        Map<String, dynamic> lastMessageInfoMap = {
-          "lastMessage": message,
-          "lastMessageSendTs": lastMessageTs,
-          "lastMessageSendBy": myUserName
-        };
-
-        DatabaseMethods().updateLastMessageSend(chatRoomId, lastMessageInfoMap);
-
-        if (sendClicked) {
-          // remove the text in the message input field
-          messageTextEdittingController.text = "";
-          // make message id blank to get regenerated on next message send
-          messageId = "";
-        }
-      });
-    }
-  }
-
-  Widget chatMessageTile(String message, bool sendByMe) {
-    return Row(
-      mainAxisAlignment:
-      sendByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-      children: [
-        Flexible(
-          child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(24),
-                  bottomRight:
-                  sendByMe ? Radius.circular(0) : Radius.circular(24),
-                  topRight: Radius.circular(24),
-                  bottomLeft:
-                  sendByMe ? Radius.circular(24) : Radius.circular(0),
-                ),
-                color: sendByMe ? Colors.blue : Color(0xfff1f0f0),
-              ),
-              padding: EdgeInsets.all(16),
-              child: Text(
-                message,
-                style: TextStyle(color: Colors.white),
-              )),
-        ),
-      ],
-    );
-  }
-
-  Widget chatMessages() {
-    return StreamBuilder(
-      stream: messageStream,
-      builder: (context, snapshot) {
-        return snapshot.hasData
-            ? ListView.builder(
-            padding: EdgeInsets.only(bottom: 70, top: 16),
-            itemCount: snapshot.data.docs.length,
-            reverse: true,
-            itemBuilder: (context, index) {
-              DocumentSnapshot ds = snapshot.data.docs[index];
-              return chatMessageTile(
-                  ds["message"], myUserName == ds["sendBy"]);
-            })
-            : Center(child: CircularProgressIndicator());
-      },
-    );
-  }
-
-  getAndSetMessages() async {
-    messageStream = await DatabaseMethods().getChatRoomMessages(chatRoomId);
-    setState(() {});
-  }
-
-  doThisOnLaunch() async {
-    await getMyInfoFromSharedPreference();
-    getAndSetMessages();
-  }
-
-  @override
-  void initState() {
-    doThisOnLaunch();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Scaffold(
+
       appBar: AppBar(
-        title: Text(widget.name),
-      ),
-      body: Container(
-        child: Stack(
+        backgroundColor:CustomColors.firebaseNavy,
+        title: Row(
+          /*
+        * on title we use the row widget so that it can accept many data on app bar
+
+         */
           children: [
-            chatMessages(),
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                color: Colors.black.withOpacity(0.8),
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: TextField(
-                          controller: messageTextEdittingController,
-                          // onChanged: (value) {
-                          //   addMessage(false);
-                          // },
-                          style: TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Type a message",
-                              hintStyle:
-                              TextStyle(color: Colors.white.withOpacity(0.6))),
-                        )),
-                    GestureDetector(
-                      onTap: () {
-                        addMessage(true);
-                      },
-                      child: Icon(
-                        Icons.send,
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
+            ClipRRect(
+              borderRadius: BorderRadius.circular(80),
+              child:
+              ClipOval(
+
+                child: Material(
+                  color: CustomColors.firebaseOrange.withOpacity(0.3),
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Icon(
+                      Icons.person,
+                      size: 30,
+                      color: CustomColors.firebaseGrey,
+                    ),
+                  ),
                 ),
               ),
-            )
+
+            ),
+            SizedBox(width: 5,),
+            Text(senderName,style: TextStyle(fontSize: 20, color: CustomColors.firebaseOrange),)
           ],
         ),
+      ),
+      body: Column(
+
+        children: [
+          /*
+        * the first container is where the message will be displayed
+
+         */
+          Expanded(child: Container(
+
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                // color: CustomColors.firebaseNavy,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(5),
+                  topRight: Radius.circular(5),
+                )
+
+            ),
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance.collection('users').doc(senderId.uid).collection('messages').doc(receiverId).collection('chats').orderBy('date', descending: true).snapshots(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if(snapshot.hasData){
+                  if(snapshot.data.docs.length <1){
+                    return const Center(
+                      child: Text(
+                          "say hi"
+                      ),
+                    );
+                  }
+                  return ListView.builder(
+                      itemCount: snapshot.data.docs.length,
+                      reverse: true,
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: (context, index){
+                        bool isMe = snapshot.data.docs[index]['senderId'] ==senderId.uid;
+                        return SingleMessage(
+                            message: snapshot.data.docs[index]['message'],
+                            isMe: isMe,
+                            date:timeago.format(DateTime.tryParse(snapshot.data.docs[index]['date'].toDate().toString())).toString() );
+                      });
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+
+
+              },
+              /*
+        * this container will contain the text messaging area where sender can send a message to receiver
+        * to improve code readability we created the widget in widget folder that will contain the functionality
+
+         */
+
+
+            ),
+          )
+          ),
+          MessageTextField(senderId: senderId.uid, receiverId: receiverId),
+        ],
       ),
     );
   }

@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:plwha/res/custom_colors.dart';
+import 'package:tamka/res/custom_colors.dart';
 
 import '../searchbar/search_bar.dart';
 import 'app_bar_title.dart';
@@ -15,7 +16,15 @@ class GameAppBarUI extends StatelessWidget{
       AppBar(
         elevation: 0,
         backgroundColor: CustomColors.firebaseNavy,
-        title: const AppBarTitle(),
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(FontAwesomeIcons.comments,size: 18, color: CustomColors.firebaseOrange,),
+
+            Text("\t Forums", style: TextStyle(fontSize: 18, color: CustomColors.firebaseYellow,),),
+          ],
+        ),
         actions:
         <Widget>[
           Padding(
@@ -33,67 +42,7 @@ class GameAppBarUI extends StatelessWidget{
               )
           ),
 
-          PopupMenuButton(
-              color: CustomColors.firebaseNavy,
-              // add icon, by default "3 dot" icon
-              // icon: Icon(Icons.book)
-              itemBuilder: (context) {
-                return [
-                  PopupMenuItem<int>(
-                    value: 0,
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Icon(FontAwesomeIcons.user, size: 18,),
-                          SizedBox(width: 5,),
-                          Text("Game Profile"),
-                        ]
-                    ),
-                  ),
 
-                  PopupMenuItem<int>(
-                    value: 1,
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Icon(FontAwesomeIcons.bullhorn, size: 18,),
-                          SizedBox(width: 5,),
-                          Text(" Broadcast"),
-                        ]
-                    ),
-                  ),
-                  PopupMenuItem<int>(
-                    value: 2,
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Icon(FontAwesomeIcons.infoCircle, size: 18,),
-                          SizedBox(width: 5,),
-                          Text(" About PLWHA"),
-                        ]
-                    ),
-                  ),
-                ];
-              },
-              onSelected: (value) {
-                if (value == 0) {
-                  User user = FirebaseAuth.instance.currentUser;
-                  if (user != null) {
-                    _showMyDialog(context);
-                  }
-                } else if (value == 1) {
-
-                } else if (value == 2) {
-                  _showMyDialog(context);
-                }
-                try {} on Exception catch (_, e) {
-                    print(e);
-                }
-              }
-          ),
         ],
       );
   }

@@ -1,5 +1,5 @@
-import 'package:plwha/res/colors.dart';
-import 'package:plwha/res/widgets.dart';
+import 'package:tamka/res/colors.dart';
+import 'package:tamka/res/widgets.dart';
 import 'package:flutter/material.dart';
 
 class BookDetails extends StatelessWidget {
