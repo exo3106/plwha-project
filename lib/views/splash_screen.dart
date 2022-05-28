@@ -96,15 +96,19 @@ class VideoState extends State<Splash> with SingleTickerProviderStateMixin{
               )
               ),
 
-              Padding(padding: EdgeInsets.only(bottom: 30.0),
+              Padding(padding: EdgeInsets.only(bottom:5.0),
                   child:Text("powered by",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: CustomColors.firebaseNavy,
                         fontSize: 15),
                   )
-              ),Image.asset("assets/vliruos-logo.png")
-              
+              ),
+              SizedBox(
+                  height:50,
+                  width: 80,
+                  child: Image.asset("assets/vliruos-logo.png")
+              ),
             ],
           ),
         ],

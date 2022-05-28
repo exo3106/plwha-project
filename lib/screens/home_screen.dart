@@ -9,7 +9,7 @@ import 'package:tamka/widgets/appbar/HomeAppBarUI.dart';
 import 'package:tamka/widgets/nav_drawer.dart';
 import '../services/auth.dart';
 import 'chat_screen_ui.dart';
-import 'game_screen_ui.dart';
+import 'forum_screen_ui.dart';
 import 'home_screen_ui.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final screens = [
       const HomeScreenUI(),
       const ChatScreenUI(),
-      GameScreenUI()
+      ForumScreenUI()
   ];
 
   _HomeScreenState(this._user);
@@ -91,17 +91,17 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-  _logoutUser() async{
-    setState(() {
-      _isSigningOut = true;
-    });
-    await AuthMethods.signOut();
-    setState(() {
-      _isSigningOut = false;
-    });
-    Navigator.of(context)
-        .pushReplacement(routeToSignInScreen());
-  }
+  // _logoutUser() async{
+  //   setState(() {
+  //     _isSigningOut = true;
+  //   });
+  //   await AuthMethods.signOut();
+  //   setState(() {
+  //     _isSigningOut = false;
+  //   });
+  //   Navigator.of(context)
+  //       .pushReplacement(routeToSignInScreen());
+  // }
   Future<void> _showMyDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
@@ -129,36 +129,36 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-  Future<void> _showGroupDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('PEOPLE LIVING WITH HIV/AIS PROJECT'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text("The Project titled People Living with HIV and Aids (PLWHA) is coordinated under the Faculty of Law Mzumbe University "
-                    "in collaboration with the University of Ghent in Belgium. HIV/AIDS is a major development crisis"
-                    "affecting the whole population and all sectors. Being an economic, social, and cultural problem, HIV/AIDS"
-                    "discrimination and stigma is one of the greatest challenges in the prevention and control of the epidemic. Often, people"
-                    "living with HIV/AIDS are deprived of health and social protection."),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // Future<void> _showGroupDialog() async {
+  //   return showDialog<void>(
+  //     context: context,
+  //     barrierDismissible: false, // user must tap button!
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text('PEOPLE LIVING WITH HIV/AIS PROJECT'),
+  //         content: SingleChildScrollView(
+  //           child: ListBody(
+  //             children: const <Widget>[
+  //               Text("The Project titled People Living with HIV and Aids (PLWHA) is coordinated under the Faculty of Law Mzumbe University "
+  //                   "in collaboration with the University of Ghent in Belgium. HIV/AIDS is a major development crisis"
+  //                   "affecting the whole population and all sectors. Being an economic, social, and cultural problem, HIV/AIDS"
+  //                   "discrimination and stigma is one of the greatest challenges in the prevention and control of the epidemic. Often, people"
+  //                   "living with HIV/AIDS are deprived of health and social protection."),
+  //             ],
+  //           ),
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: const Text('Close'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
   PageRoute routeToSignInScreen() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => SignInScreen(),

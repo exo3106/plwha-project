@@ -6,12 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:tamka/screens/home_screen.dart';
 import 'package:tamka/services/database.dart';
 import 'package:sizer/sizer.dart';
-import 'dart:math';
 import '../helperfunctions/sharedpref_helper.dart';
 import '../res/custom_colors.dart';
 import '../services/Validator.dart';
 import '../services/auth.dart';
-import '../widgets/google_sign_in_button.dart';
 
 
 class SignInScreen extends StatefulWidget {
@@ -47,22 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
     _isSigningIn=false;
     super.dispose();
   }
-  final _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-  final Random _rnd = Random();
 
-  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
-      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-  FutureBuilder googleLogInWithFireBase(){
-    return FutureBuilder(
-      future: AuthMethods.initializeFirebase(context: context),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const Text('Error initializing Firebase');
-        }
-        return const GoogleSignInButton();
-      },
-    );
-  }
   OutlinedButton registerNewUserButton(SnackBar snackBar){
     return OutlinedButton(
       style: ButtonStyle(
@@ -204,11 +187,11 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  void _printLatestValue() {
-    if (kDebugMode) {
-      print('Second text field: ${_pass.text}');
-    }
-  }
+  // void _printLatestValue() {
+  //   if (kDebugMode) {
+  //     print('Second text field: ${_pass.text}');
+  //   }
+  // }
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;

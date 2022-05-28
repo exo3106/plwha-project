@@ -4,13 +4,12 @@ import 'package:tamka/helperfunctions/helper_functions.dart';
 import '../res/custom_colors.dart';
 import '../services/database_service.dart';
 import '../widgets/forum_widget/group_tile.dart';
-import '../widgets/searchbar/search_bar.dart';
-class GameScreenUI extends StatefulWidget {
+class ForumScreenUI extends StatefulWidget {
   @override
-  _GameScreenUIState createState() => _GameScreenUIState();
+  _ForumScreenUIState createState() => _ForumScreenUIState();
 }
 
-class _GameScreenUIState extends State<GameScreenUI> {
+class _ForumScreenUIState extends State<ForumScreenUI> {
 
   // data
   // final AuthService _auth = AuthService();
@@ -127,13 +126,13 @@ class _GameScreenUIState extends State<GameScreenUI> {
 
 
   void _popupDialog(BuildContext context) {
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
       child: Text("Cancel"),
       onPressed:  () {
         Navigator.of(context).pop();
       },
     );
-    Widget createButton = FlatButton(
+    Widget createButton = TextButton(
       child: Text("Create", style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: CustomColors.firebaseAmber),),
       onPressed:  () async {
         if(_groupName != null) {

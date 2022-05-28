@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:plwha/res/custom_colors.dart';
-
+import 'package:tamka/res/custom_colors.dart';
 import '../helperfunctions/sharedpref_helper.dart';
 import '../services/database.dart';
 import '../views/chatscreen.dart';
@@ -23,8 +22,6 @@ getChatRoomIdByUsernames(String a, String b) {
 }
 
 class _UserChatPageState extends State<UserChatPage> {
-  final bool _validate = false;
-  final _controller = TextEditingController();
   String myName, myProfilePic, myUserName, myEmail;
   Stream usersStream, chatRoomsStream;
   String userdata;
@@ -63,7 +60,7 @@ class _UserChatPageState extends State<UserChatPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ChatScreen(myUserName, name)));
+                builder: (context) => ChatScreen()));
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 8),
@@ -187,7 +184,7 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ChatScreen(username, name)));
+                builder: (context) => ChatScreen()));
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 8),

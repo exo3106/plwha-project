@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '';
 import '../res/custom_colors.dart';
 import '../views/chatscreen.dart';
 
@@ -28,8 +26,6 @@ class SearchScreen extends StatefulWidget{
 }
 
 class _SearchScreenState  extends State<SearchScreen>{
-
-  bool _isSigningOut = false;
   bool is_found = false;
   TextEditingController searchController =TextEditingController();
 

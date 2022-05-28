@@ -1,6 +1,8 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import '../models/book_model.dart';
+import '../models/firebase_file.dart';
+import '../screens/image_page.dart';
+import '../services/database_service.dart';
 
 class ArticlesTab extends StatefulWidget {
   const ArticlesTab ({Key key}) : super(key: key);
@@ -9,57 +11,72 @@ class ArticlesTab extends StatefulWidget {
   @override
   _ArticlesTabState createState() => _ArticlesTabState();
 }
-class _ArticlesTabState extends State<ArticlesTab>{
-  List<PostModel> books =[];
-  Reference storageRef =  FirebaseStorage.instance.ref().child('articles');
+class _ArticlesTabState extends State<ArticlesTab> {
+  List<PostModel> books = [];
+  Future<List<FirebaseFile>> futureFiles = FirebaseApi.listAll('articles/');
+
   @override
-  void initState(){
-    listArticles();
+  void initState() {
     super.initState();
   }
 
-
-
-  /* Function to list articles files from firestore */
-  Future<Widget> listArticles() async {
-
-    final storageRef = FirebaseStorage.instance.ref().child("articles");
-    final listResult = await storageRef.listAll();
-    for (var prefix in listResult.prefixes) {
-      // The prefixes under storageRef.
-      // You can call listAll() recursively on them.
-      return  Future.value(
-          ListTile(
-          leading: Icon(Icons.list),
-          trailing: Text("GFG",
-            style: TextStyle(
-                color: Colors.green,fontSize: 15),),
-          title:Text('${prefix.name}')
-      ));
-    }
-
-  }
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
+
     return Container(
       height: 200,
-      child: FutureBuilder(
-        future: listArticles(),
+      child: FutureBuilder<List<FirebaseFile>>(
+        future: futureFiles,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Text(snapshot.data);
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-          // By default, show a loading spinner.
-          return Container(
-              width: 10,
-              height: 10,
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Center(child: CircularProgressIndicator());
+            default:
+              if (snapshot.hasError) {
+                return Center(child: Text('Some error occurred!'));
+              } else {
+                final files = snapshot.data;
 
-              child:CircularProgressIndicator()
-          );
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 12),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: files.length,
+                        itemBuilder: (context, index) {
+                          final file = files[index];
+                          return buildFile(context, file);
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              }
+          }
         },
-      )
+      ),
     );
   }
+
+  Widget buildFile(BuildContext context, FirebaseFile file) =>
+      ListTile(
+        leading: SizedBox(
+          height:30,
+          width: 30,
+            child:Image.asset("assets/file-icon.png")
+        ),
+        title: Text(
+          file.name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            decoration: TextDecoration.underline,
+            color: Colors.blue,
+          ),
+        ),
+        onTap: () =>
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ImagePage(file: file),
+            )),
+      );
 }

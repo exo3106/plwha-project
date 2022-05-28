@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:plwha/screens/sign_in_screen.dart';
+import 'package:tamka/screens/sign_in_screen.dart';
 import '../helperfunctions/sharedpref_helper.dart';
 import '../services/auth.dart';
 import '../services/database.dart';
@@ -78,7 +78,7 @@ class _HomeState extends State<Home> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ChatScreen(username, name)));
+                builder: (context) => ChatScreen()));
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 8),
@@ -241,7 +241,7 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ChatScreen(username, name)));
+                builder: (context) => ChatScreen()));
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 8),

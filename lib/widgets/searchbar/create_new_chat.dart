@@ -75,7 +75,7 @@ class _CreateSearchChatState extends State<CreateSearchChat> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ChatScreen(username, name)));
+                builder: (context) => ChatScreen()));
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 8),
@@ -252,7 +252,7 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ChatScreen(username, name)));
+                builder: (context) => ChatScreen()));
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 8),
